@@ -148,7 +148,44 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+  </component>
   <component name="libraryTable">
+    <library name="com.fasterxml.jackson.core:jackson-annotations:2.9.5" type="repository">
+      <properties maven-id="com.fasterxml.jackson.core:jackson-annotations:2.9.5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES />
+    </library>
+    <library name="com.fasterxml.jackson.core:jackson-core:2.9.5" type="repository">
+      <properties maven-id="com.fasterxml.jackson.core:jackson-core:2.9.5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES />
+    </library>
+    <library name="com.fasterxml.jackson.core:jackson-databind:2.9.5" type="repository">
+      <properties maven-id="com.fasterxml.jackson.core:jackson-databind:2.9.5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES />
+    </library>
     <library name="org.bouncycastle:bcprov-jdk15on:1.59" type="repository">
       <properties maven-id="org.bouncycastle:bcprov-jdk15on:1.59" />
       <CLASSES>

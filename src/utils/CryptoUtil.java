@@ -1,6 +1,7 @@
 package utils;
 
 import core.Transaction;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.*;
 import java.util.ArrayList;
@@ -8,30 +9,55 @@ import java.util.Base64;
 import java.util.List;
 
 public class CryptoUtil {
-    public static String applySha256(String input) {
+    // https://stackoverflow.com/questions/5531455/how-to-hash-some-string-with-sha256-in-java#5531479
 
-        try {
+    /**
+     * This method take a string as input and convert it with the SHA-256 algorithm
+     * @param base the string to convert
+     * @return a string of 64 characters converted through SHA-256
+     */
+    public static String getHash256(String base) {
+        try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
 
-            //Applies sha256 to our input,
-            byte[] hash = digest.digest(input.getBytes("UTF-8"));
-
-            StringBuffer hexString = new StringBuffer(); // This will contain hash as hexidecimal
             for (int i = 0; i < hash.length; i++) {
                 String hex = Integer.toHexString(0xff & hash[i]);
-                if (hex.length() == 1) hexString.append('0');
+                if(hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
+
             return hexString.toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch(Exception ex){
+            throw new RuntimeException(ex);
         }
     }
 
-    //Applies ECDSA Signature and returns the result ( as bytes ).
+    /**
+     * This function returns a string that is formed by a number of zeros equals to the difficulty parameter
+     * @param difficulty the number of zeros that the string will contain
+     * @return the string formed by zeros
+     */
+    public static String getTarget(int difficulty) {
+        StringBuilder target = new StringBuilder();
+        for (int i = 0; i < difficulty; i++) {
+            target.append('0');
+        }
+        return target.toString();
+    }
+
+    /**
+     * Applies the ECDSA signiture
+     * @param privateKey
+     * @param input
+     * @return
+     */
     public static byte[] applyECDSASig(PrivateKey privateKey, String input) {
         Signature dsa;
         byte[] output = new byte[0];
+        Security.addProvider(new BouncyCastleProvider());
+
         try {
             dsa = Signature.getInstance("ECDSA", "BC");
             dsa.initSign(privateKey);
@@ -45,14 +71,22 @@ public class CryptoUtil {
         return output;
     }
 
-    //Verifies a String signature
+    /**
+     *
+     * @param publicKey
+     * @param data
+     * @param signature
+     * @return
+     */
     public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
+        Security.addProvider(new BouncyCastleProvider());
+
         try {
             Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
             ecdsaVerify.initVerify(publicKey);
             ecdsaVerify.update(data.getBytes());
             return ecdsaVerify.verify(signature);
-        } catch (Exception e) {
+        }catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -62,14 +96,13 @@ public class CryptoUtil {
         return new GsonBuilder().setPrettyPrinting().create().toJson(o);
     }*/
 
-    //Returns difficulty string target, to compare to hash. eg difficulty of 5 will return "00000"
-    public static String getDificultyString(int difficulty) {
-        return new String(new char[difficulty]).replace('\0', '0');
-    }
-
+    /**
+     * Converts a Key (public or private) in hexadecimal
+     * @param key to convert
+     * @return a string that represents the key in hexadecimal
+     */
     public static String getStringFromKey(Key key) {
-        return Base64
-                .getEncoder().encodeToString(key.getEncoded());
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
     public static String getMerkleRoot(ArrayList<Transaction> transactions) {
@@ -84,7 +117,7 @@ public class CryptoUtil {
         while (count > 1) {
             treeLayer = new ArrayList<String>();
             for (int i = 1; i < previousTreeLayer.size(); i += 2) {
-                treeLayer.add(applySha256(previousTreeLayer.get(i - 1) + previousTreeLayer.get(i)));
+                treeLayer.add(CryptoUtil.getHash256(previousTreeLayer.get(i - 1) + previousTreeLayer.get(i)));
             }
             count = treeLayer.size();
             previousTreeLayer = treeLayer;

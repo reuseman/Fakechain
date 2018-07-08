@@ -95,7 +95,7 @@ public class Transaction {
 
     private String calulateHash() {
         sequence++; //increase the sequence to avoid 2 identical transactions having the same hash
-        return CryptoUtil.applySha256(
+        return CryptoUtil.getHash256(
                 CryptoUtil.getStringFromKey(sender) +
                         CryptoUtil.getStringFromKey(reciepient) +
                         Float.toString(value) + sequence

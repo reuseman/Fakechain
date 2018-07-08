@@ -1,7 +1,12 @@
 package core;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import utils.Commons;
 import utils.CryptoUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,25 +14,22 @@ public class Block {
     public String hash;
     public String previousHash;
     public String merkleRoot;
-    public ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
-    public long timeStamp; //as number of milliseconds since 1/1/1970.
+    public ArrayList<Transaction> transactions = new ArrayList<>(); //our data will be a simple message.
+    public long timeStamp;
     public int nonce;
 
-    //Block Constructor.
     public Block(String previousHash ) {
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
-
-        this.hash = calculateHash(); //Making sure we do this after we set the other values.
+        this.hash = calculateHash();
     }
 
-    //Calculate new hash based on blocks contents
     public String calculateHash() {
-        String calculatedhash = CryptoUtil.applySha256(
+        String calculatedhash = CryptoUtil.getHash256(
                 previousHash +
-                        Long.toString(timeStamp) +
-                        Integer.toString(nonce) +
-                        merkleRoot
+                Long.toString(timeStamp) +
+                Integer.toString(nonce) +
+                merkleRoot
         );
         return calculatedhash;
     }
@@ -35,7 +37,7 @@ public class Block {
     //Increases nonce value until hash target is reached.
     public void mineBlock(int difficulty) {
         merkleRoot = CryptoUtil.getMerkleRoot(transactions);
-        String target = CryptoUtil.getDificultyString(difficulty); //Create a string with difficulty * "0"
+        String target = CryptoUtil.getTarget(difficulty); //Create a string with difficulty * "0"
         while(!hash.substring( 0, difficulty).equals(target)) {
             nonce ++;
             hash = calculateHash();
@@ -57,5 +59,74 @@ public class Block {
         transactions.add(transaction);
         System.out.println("Transaction Successfully added to Block");
         return true;
+    }
+
+    public boolean saveToFile() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(Commons.BLOCK_FILE_PATH), this);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String convertToString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public void setPreviousHash(String previousHash) {
+        this.previousHash = previousHash;
+    }
+
+    public String getMerkleRoot() {
+        return merkleRoot;
+    }
+
+    public void setMerkleRoot(String merkleRoot) {
+        this.merkleRoot = merkleRoot;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public int getNonce() {
+        return nonce;
+    }
+
+    public void setNonce(int nonce) {
+        this.nonce = nonce;
     }
 }
