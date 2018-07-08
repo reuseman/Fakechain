@@ -18,8 +18,8 @@ public class FakechainService {
         this.walletsManager = walletsManager;
         this.blockchain = blockchain;
 
-        Wallet walletA = walletsManager.getWallet(1);
-        Wallet walletB = walletsManager.getWallet(2);
+        Wallet walletA = walletsManager.getWallet(0);
+        Wallet walletB = walletsManager.getWallet(1);
 
         //testing
         Block block1 = new Block(this.blockchain.blockchain.get(0).hash);

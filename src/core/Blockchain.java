@@ -16,16 +16,17 @@ public class Blockchain {
         this.UTXOs = new HashMap<>();
 
         // Hard code the first transaction to get a proper working Blockchain
-        genesisTransaction = new Transaction(coinbaseWallet.publicKey, receiverWallet.publicKey, 100f, null);
-        genesisTransaction.generateSignature(coinbaseWallet.privateKey);     //manually sign the genesis transaction
-        genesisTransaction.transactionId = "0"; //manually set the transaction id
-        genesisTransaction.outputs.add(new TransactionOUT(genesisTransaction.reciepient, genesisTransaction.value, genesisTransaction.transactionId)); //manually add the Transactions Output
-        UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
+        this.genesisTransaction = new Transaction(coinbaseWallet.publicKey, receiverWallet.publicKey, 100f, null);
+        this.genesisTransaction.generateSignature(coinbaseWallet.privateKey);     //manually sign the genesis transaction
+        this.genesisTransaction.transactionId = "0"; //manually set the transaction id
+        this.genesisTransaction.outputs.add(new TransactionOUT(this.genesisTransaction.reciepient,
+                this.genesisTransaction.value, this.genesisTransaction.transactionId)); //manually add the Transactions Output
+        UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
 
         System.out.println("Creating and Mining Genesis block... ");
         Block genesis = new Block("0");
-        genesis.addTransaction(genesisTransaction);
-        addBlock(genesis);
+        genesis.addTransaction(this.genesisTransaction);
+        this.addBlock(genesis);
     }
 
     public Boolean isChainValid() {
@@ -41,18 +42,18 @@ public class Blockchain {
             previousBlock = this.blockchain.get(i - 1);
             //compare registered hash and calculated hash:
             if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
-                System.out.println("#Current Hashes not equal");
+                System.out.println("ERROR: Current Hashes not equal!");
                 return false;
             }
             //compare previous hash and registered previous hash
             if (!previousBlock.hash.equals(currentBlock.previousHash)) {
-                System.out.println("#Previous Hashes not equal");
+                System.out.println("ERROR: Previous Hashes not equal!");
                 return false;
             }
 
             // Is puzzle properly solved?
             if (!currentBlock.hash.substring(0, Commons.MINING_BLOCK_DIFFICULTY).equals(hashTarget)) {
-                System.out.println("#This block hasn't been mined");
+                System.out.println("ERROR: This block hasn't been mined!");
                 return false;
             }
 
@@ -62,11 +63,11 @@ public class Blockchain {
                 Transaction currentTransaction = currentBlock.transactions.get(t);
 
                 if (!currentTransaction.verifySignature()) {
-                    System.out.println("#Signature on Transaction(" + t + ") is Invalid");
+                    System.out.println("ERROR: Signature on Transaction(" + t + ") is Invalid!");
                     return false;
                 }
                 if (currentTransaction.getInputsValue() != currentTransaction.getOutputsValue()) {
-                    System.out.println("#Inputs are note equal to outputs on Transaction(" + t + ")");
+                    System.out.println("ERROR: Inputs are note equal to outputs on Transaction(" + t + ")!");
                     return false;
                 }
 
@@ -74,12 +75,12 @@ public class Blockchain {
                     tmpOut = tempUTXOs.get(input.transactionOutputId);
 
                     if (tmpOut == null) {
-                        System.out.println("#Referenced input on Transaction(" + t + ") is Missing");
+                        System.out.println("ERROR: Referenced input on Transaction(" + t + ") is Missing!");
                         return false;
                     }
 
                     if (input.UTXO.value != tmpOut.value) {
-                        System.out.println("#Referenced input Transaction(" + t + ") value is Invalid");
+                        System.out.println("ERROR: Referenced input Transaction(" + t + ") value is Invalid!");
                         return false;
                     }
 
@@ -91,11 +92,11 @@ public class Blockchain {
                 }
 
                 if (currentTransaction.outputs.get(0).reciepient != currentTransaction.reciepient) {
-                    System.out.println("#Transaction(" + t + ") output reciepient is not who it should be");
+                    System.out.println("ERROR: Transaction(" + t + ") output reciepient is not who it should be!");
                     return false;
                 }
                 if (currentTransaction.outputs.get(1).reciepient != currentTransaction.sender) {
-                    System.out.println("#Transaction(" + t + ") output 'change' is not sender.");
+                    System.out.println("ERROR: Transaction(" + t + ") output 'change' is not sender!");
                     return false;
                 }
 
