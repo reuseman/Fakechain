@@ -16,11 +16,13 @@ public class Wallet {
     public String username;
     public PrivateKey privateKey;
     public PublicKey publicKey;
+    public boolean miningEnabled;
 
     public HashMap<String, TransactionOUT> UTXOs = new HashMap<String, TransactionOUT>();
 
     public Wallet(String username) {
         this.username = username;
+        this.miningEnabled = false;
         generateKeyPair();
     }
 
@@ -29,10 +31,10 @@ public class Wallet {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA", "BC");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
-            // Initialize the key generator and generate a KeyPair
+
             keyGen.initialize(ecSpec, random); //256
             KeyPair keyPair = keyGen.generateKeyPair();
-            // Set the public and private keys from the keyPair
+
             this.privateKey = keyPair.getPrivate();
             this. publicKey = keyPair.getPublic();
 
@@ -100,7 +102,7 @@ public class Wallet {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -108,7 +110,7 @@ public class Wallet {
     }
 
     public PrivateKey getPrivateKey() {
-        return privateKey;
+        return this.privateKey;
     }
 
     public void setPrivateKey(PrivateKey privateKey) {
@@ -116,7 +118,7 @@ public class Wallet {
     }
 
     public PublicKey getPublicKey() {
-        return publicKey;
+        return this.publicKey;
     }
 
     public void setPublicKey(PublicKey publicKey) {
@@ -124,10 +126,18 @@ public class Wallet {
     }
 
     public HashMap<String, TransactionOUT> getUTXOs() {
-        return UTXOs;
+        return this.UTXOs;
     }
 
     public void setUTXOs(HashMap<String, TransactionOUT> UTXOs) {
         this.UTXOs = UTXOs;
+    }
+
+    public boolean isMiningEnabled() {
+        return this.miningEnabled;
+    }
+
+    public void setMiningEnabled(boolean miningEnabled) {
+        this.miningEnabled = miningEnabled;
     }
 }

@@ -8,16 +8,16 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 
 public class Transaction {
-    private static int sequence = 0; //A rough count of how many transactions have been generated
-    public String transactionId; //Contains a hash of transaction*
-    public PublicKey sender; //Senders address/public key.
-    public PublicKey reciepient; //Recipients address/public key.
-    public float value; //Contains the amount we wish to send to the recipient.
-    public byte[] signature; //This is to prevent anybody else from spending funds in our wallet.
+    private static int sequence = 0;
+    public String transactionId;
+    public PublicKey sender;
+    public PublicKey reciepient;
+    public float value;
+    public byte[] signature;
+
     public ArrayList<TransactionIN> inputs = new ArrayList<TransactionIN>();
     public ArrayList<TransactionOUT> outputs = new ArrayList<TransactionOUT>();
 
-    // Constructor:
     public Transaction(PublicKey from, PublicKey to, float value, ArrayList<TransactionIN> inputs) {
         this.sender = from;
         this.reciepient = to;
@@ -27,46 +27,46 @@ public class Transaction {
 
     public boolean processTransaction(Blockchain blockchain) {
         if (!verifySignature()) {
-            System.out.println("#Transaction Signature failed to verify");
+            System.out.println("ERROR: Transaction signature is not valid");
             return false;
         }
 
-        //Gathers transaction inputs (Making sure they are unspent):
+        // Check if transaction inputs are unspent
         for (TransactionIN i : inputs) {
             i.UTXO = blockchain.UTXOs.get(i.transactionOutputId);
         }
 
-        //Checks if transaction is valid:
+        // Check if it is valid
         if (this.getInputsValue() < Commons.MIMIMUM_FAKECOINS_PER_TRANSACTION) {
             System.out.println("Transaction Inputs too small: " + this.getInputsValue());
             System.out.println("Please enter the amount greater than " + Commons.MIMIMUM_FAKECOINS_PER_TRANSACTION);
             return false;
         }
 
-        //Generate transaction outputs:
+        // Generate the transaction outputs
         float leftOver = getInputsValue() - this.value; //get value of inputs then the left over change:
         this.transactionId = calulateHash();
         this.outputs.add(new TransactionOUT(this.reciepient, this.value, this.transactionId)); //send value to recipient
         this.outputs.add(new TransactionOUT(this.sender, leftOver, this.transactionId)); //send the left over 'change' back to sender
 
-        //Add outputs to Unspent list
+        // Adding outputs to the unspent list
         for (TransactionOUT o : this.outputs) {
             blockchain.UTXOs.put(o.id, o);
         }
 
         //Remove transaction inputs from UTXO lists as spent:
         for (TransactionIN i : this.inputs) {
-            if (i.UTXO == null) continue; //if Transaction can't be found skip it
+            if (i.UTXO == null) continue;
             blockchain.UTXOs.remove(i.UTXO.id);
         }
-
+        // TODO substitute the continue with Java's best practive before the Exam
         return true;
     }
 
     public float getInputsValue() {
         float total = 0;
         for (TransactionIN i : this.inputs) {
-            if (i.UTXO == null) continue; //if Transaction can't be found skip it, This behavior may not be optimal.
+            if (i.UTXO == null) continue;
             total += i.UTXO.value;
         }
         return total;

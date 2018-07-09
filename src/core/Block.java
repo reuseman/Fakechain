@@ -14,11 +14,11 @@ public class Block {
     public String hash;
     public String previousHash;
     public String merkleRoot;
-    public ArrayList<Transaction> transactions = new ArrayList<>(); //our data will be a simple message.
+    public ArrayList<Transaction> transactions = new ArrayList<>();
     public long timeStamp;
     public int nonce;
 
-    public Block(String previousHash ) {
+    public Block(String previousHash) {
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
         this.hash = calculateHash();
@@ -34,21 +34,24 @@ public class Block {
         return calculatedhash;
     }
 
-    //Increases nonce value until hash target is reached.
     public void mineBlock(int difficulty) {
         merkleRoot = CryptoUtil.getMerkleRoot(transactions);
-        String target = CryptoUtil.getTarget(difficulty); //Create a string with difficulty * "0"
+
+        String target = CryptoUtil.getTarget(difficulty);
         while(!hash.substring( 0, difficulty).equals(target)) {
             nonce ++;
             hash = calculateHash();
         }
+
         System.out.println("Block Mined!!! : " + hash);
     }
 
-    //Add transactions to this block
     public boolean addTransaction(Blockchain blockchain, Transaction transaction) {
         //process transaction and check if valid, unless block is genesis block then ignore.
-        if(transaction == null) return false;
+        if(transaction == null) {
+            return false;
+        }
+
         if((!"0".equals(previousHash))) {
             if((transaction.processTransaction(blockchain) != true)) {
                 System.out.println("Transaction failed to process. Discarded.");

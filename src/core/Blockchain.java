@@ -11,6 +11,12 @@ public class Blockchain {
     public HashMap<String, TransactionOUT> UTXOs;
     public Transaction genesisTransaction;
 
+    public Blockchain(Blockchain another) {
+        this.blockchain = another.blockchain;
+        this.UTXOs = another.UTXOs;
+        this.genesisTransaction = another.genesisTransaction;
+    }
+
     public Blockchain(Wallet coinbaseWallet, Wallet receiverWallet) {
         this.blockchain = new ArrayList<>();
         this.UTXOs = new HashMap<>();
@@ -18,7 +24,7 @@ public class Blockchain {
         // Hard code the first transaction to get a proper working Blockchain
         this.genesisTransaction = new Transaction(coinbaseWallet.publicKey, receiverWallet.publicKey, 100f, null);
         this.genesisTransaction.generateSignature(coinbaseWallet.privateKey);     //manually sign the genesis transaction
-        this.genesisTransaction.transactionId = "0"; //manually set the transaction id
+        this.genesisTransaction.transactionId = "0";
         this.genesisTransaction.outputs.add(new TransactionOUT(this.genesisTransaction.reciepient,
                 this.genesisTransaction.value, this.genesisTransaction.transactionId)); //manually add the Transactions Output
         this.UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
@@ -40,12 +46,12 @@ public class Blockchain {
         for (int i = 1; i < this.blockchain.size(); i++) {
             currentBlock = this.blockchain.get(i);
             previousBlock = this.blockchain.get(i - 1);
-            //compare registered hash and calculated hash:
+
             if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
                 System.out.println("ERROR: Current Hashes not equal!");
                 return false;
             }
-            //compare previous hash and registered previous hash
+
             if (!previousBlock.hash.equals(currentBlock.previousHash)) {
                 System.out.println("ERROR: Previous Hashes not equal!");
                 return false;

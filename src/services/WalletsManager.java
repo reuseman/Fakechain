@@ -9,9 +9,25 @@ public class WalletsManager {
 
     public WalletsManager() {
         this.wallets = new ArrayList<>();
+
+        // Hard coding the initial wallet (only the first two are a needed)
         this.wallets.add(new Wallet("coinbase"));
         this.wallets.add(new Wallet("alex"));
         this.wallets.add(new Wallet("john"));
+
+        // Hard coding other wallet, BUT setting them to be even miner
+        this.wallets.add(new Wallet("miner1"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.add(new Wallet("miner2"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.add(new Wallet("miner3"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.add(new Wallet("miner4"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.add(new Wallet("miner5"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.add(new Wallet("miner6"));
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
     }
 
     public void createNewWallet(String username) {

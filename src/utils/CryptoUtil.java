@@ -91,11 +91,6 @@ public class CryptoUtil {
         }
     }
 
-    //Short hand helper to turn Object into a json string
-    /*public static String getJson(Object o) {
-        return new GsonBuilder().setPrettyPrinting().create().toJson(o);
-    }*/
-
     /**
      * Converts a Key (public or private) in hexadecimal
      * @param key to convert
@@ -115,7 +110,7 @@ public class CryptoUtil {
         List<String> treeLayer = previousTreeLayer;
 
         while (count > 1) {
-            treeLayer = new ArrayList<String>();
+            treeLayer = new ArrayList<>();
             for (int i = 1; i < previousTreeLayer.size(); i += 2) {
                 treeLayer.add(CryptoUtil.getHash256(previousTreeLayer.get(i - 1) + previousTreeLayer.get(i)));
             }

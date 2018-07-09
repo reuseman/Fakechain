@@ -25,13 +25,6 @@ public class FakechainService {
         block1.addTransaction(this.blockchain, walletA.sendFunds(this.blockchain, walletB.publicKey, 40));
         this.blockchain.addBlock(block1);
 
-   /*     Block block2 = new Block(block1.hash);
-        System.out.println("\nWalletA Attempting to send more funds (1000) than it has...");
-        block2.addTransaction(walletA.sendFunds(walletB.publicKey, 1000f));
-        addBlock(block2);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());*/
-
         this.reader = new Scanner(System.in);
         this.answer = -1;
     }
@@ -46,6 +39,7 @@ public class FakechainService {
             }
             System.out.println("[1] CREATE NEW WALLET");
             System.out.println("[2] LOGIN INTO WALLET");
+            System.out.println("[3] CHECK CHAIN'S VALIDITY");
             System.out.println("[0] EXIT");
             System.out.print("> ");
             this.answer = reader.nextInt();
@@ -63,6 +57,10 @@ public class FakechainService {
                     break;
                 case 2:
                     this.pickWallet(reader);
+                    break;
+                case 3:
+                    boolean tmp = this.blockchain.isChainValid();
+                    System.out.println("Chain is valid: " + tmp);
                     break;
                 default:
                     System.out.println("ERROR: The number is not valid!");
@@ -192,6 +190,8 @@ public class FakechainService {
                                     selectedWallet.sendFunds(this.blockchain, receiverWallet.publicKey, fakeCoins));
                             if (transactionDone) {
                                 this.blockchain.addBlock(block1);
+                                System.out.println("# Transaction executed. Added to a block..");
+                                System.out.println("# Block mined!");
                             } else {
                                 System.out.println("ERROR: Transaction went wrong!");
                             }
