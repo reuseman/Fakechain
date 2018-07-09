@@ -8,4 +8,6 @@ public class Commons {
     public static final int MINING_BLOCK_DIFFICULTY = 5;
 
     public static final short COIN_BASE_INDEX = 0;
+
+    public static final float MIMIMUM_FAKECOINS_PER_TRANSACTION = 0.1f;
 }

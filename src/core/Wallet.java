@@ -2,7 +2,6 @@ package core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import start.Fakechain;
 import utils.Commons;
 
 import java.io.File;
@@ -34,17 +33,17 @@ public class Wallet {
             keyGen.initialize(ecSpec, random); //256
             KeyPair keyPair = keyGen.generateKeyPair();
             // Set the public and private keys from the keyPair
-            privateKey = keyPair.getPrivate();
-            publicKey = keyPair.getPublic();
+            this.privateKey = keyPair.getPrivate();
+            this. publicKey = keyPair.getPublic();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public float getBalance() {
+    public float getBalance(Blockchain blockchain) {
         float total = 0;
-        for (Map.Entry<String, TransactionOUT> item : Fakechain.UTXOs.entrySet()) {
+        for (Map.Entry<String, TransactionOUT> item : blockchain.UTXOs.entrySet()) {
             TransactionOUT UTXO = item.getValue();
             if (UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
                 UTXOs.put(UTXO.id, UTXO); //add it to our list of unspent transactions.
@@ -54,8 +53,10 @@ public class Wallet {
         return total;
     }
 
-    public Transaction sendFunds(PublicKey _recipient, float value) {
-        if (getBalance() < value) {
+    public Transaction sendFunds(Blockchain blockchain, PublicKey _recipient, float value) {
+        System.out.println("BALANCE: " + this.getBalance(blockchain));
+        System.out.println("VALUE: " + value);
+        if (this.getBalance(blockchain) < value) {
             System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
             return null;
         }

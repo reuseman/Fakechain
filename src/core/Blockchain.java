@@ -15,18 +15,26 @@ public class Blockchain {
         this.blockchain = new ArrayList<>();
         this.UTXOs = new HashMap<>();
 
+        System.out.println("IN BLOCKCHAIN BEFORE");
+        System.out.println(coinbaseWallet.username + " - [" + coinbaseWallet + "] - " + coinbaseWallet.getBalance(this));
+        System.out.println(receiverWallet.username + " - [" + receiverWallet + "] - " + receiverWallet.getBalance(this));
+
         // Hard code the first transaction to get a proper working Blockchain
         this.genesisTransaction = new Transaction(coinbaseWallet.publicKey, receiverWallet.publicKey, 100f, null);
         this.genesisTransaction.generateSignature(coinbaseWallet.privateKey);     //manually sign the genesis transaction
         this.genesisTransaction.transactionId = "0"; //manually set the transaction id
         this.genesisTransaction.outputs.add(new TransactionOUT(this.genesisTransaction.reciepient,
                 this.genesisTransaction.value, this.genesisTransaction.transactionId)); //manually add the Transactions Output
-        UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
+        this.UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
 
         System.out.println("Creating and Mining Genesis block... ");
         Block genesis = new Block("0");
-        genesis.addTransaction(this.genesisTransaction);
+        genesis.addTransaction(this, this.genesisTransaction);
         this.addBlock(genesis);
+
+        System.out.println("IN BLOCKCHAIN AFTER");
+        System.out.println(coinbaseWallet.username + " - [" + coinbaseWallet + "] - " + coinbaseWallet.getBalance(this));
+        System.out.println(receiverWallet.username + " - [" + receiverWallet + "] - " + receiverWallet.getBalance(this));
     }
 
     public Boolean isChainValid() {

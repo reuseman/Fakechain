@@ -35,10 +35,15 @@ public class Fakechain {
 
         System.out.println("Creating and Mining Genesis block... ");
         Block genesis = new Block("0");
-        genesis.addTransaction(genesisTransaction);
+        //genesis.addTransaction(blockchain, genesisTransaction);
         addBlock(genesis);
+/*
 
-        //testing
+        System.out.println(coinbase.username + " - [" + coinbase + "] - " + coinbase.getBalance(blockchain));
+        System.out.println(walletA.username + " - [" + walletA + "] - " + walletA.getBalance());
+*/
+
+       /* //testing
         Block block1 = new Block(genesis.hash);
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
         System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
@@ -58,7 +63,7 @@ public class Fakechain {
         System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
         block3.addTransaction(walletB.sendFunds(walletA.publicKey, 20));
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        System.out.println("WalletB's balance is: " + walletB.getBalance());*/
 
         isChainValid();
     }

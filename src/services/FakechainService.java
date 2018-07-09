@@ -1,8 +1,6 @@
 package services;
 
-import core.Block;
-import core.Blockchain;
-import core.Wallet;
+import core.*;
 
 import java.util.Scanner;
 
@@ -18,17 +16,21 @@ public class FakechainService {
         this.walletsManager = walletsManager;
         this.blockchain = blockchain;
 
-        Wallet walletA = walletsManager.getWallet(0);
-        Wallet walletB = walletsManager.getWallet(1);
+        Wallet walletA = walletsManager.getWallet(1);
+        Wallet walletB = walletsManager.getWallet(2);
+
+        System.out.println("BEFORE BLOCK1");
+        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
+        System.out.println("WalletB's balance is: " + walletB.getBalance(this.blockchain));
 
         //testing
         Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
+        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
         System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
-        block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
+        block1.addTransaction(this.blockchain, walletA.sendFunds(this.blockchain, walletB.publicKey, 40));
         this.blockchain.addBlock(block1);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
+        System.out.println("WalletB's balance is: " + walletB.getBalance(this.blockchain));
 
    /*     Block block2 = new Block(block1.hash);
         System.out.println("\nWalletA Attempting to send more funds (1000) than it has...");
@@ -128,7 +130,7 @@ public class FakechainService {
                 System.out.println("-------------WALLET-------------");
             }
 
-            System.out.println("Selected: " + this.selectedWallet.username + ", " + this.selectedWallet.getBalance() + " fake coins");
+            System.out.println("Selected: " + this.selectedWallet.username + ", " + this.selectedWallet.getBalance(this.blockchain) + " fake coins");
             System.out.println("[1] Make a transaction");
             System.out.println("[0] Go back");
             System.out.print("> ");
