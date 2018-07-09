@@ -8,6 +8,7 @@ public class FakechainService {
     private WalletsManager walletsManager;
     private Blockchain blockchain;
     private Wallet selectedWallet;
+    private Wallet receiverWallet;
 
     private Scanner reader;
     private int answer;
@@ -139,6 +140,7 @@ public class FakechainService {
             switch (answer) {
                 case 1:
                     System.out.println("TODO");
+                    this.selectReceiverWallet();
                     break;
                 case 0:
                     this.pickWallet(reader);
@@ -146,6 +148,44 @@ public class FakechainService {
                 default:
                     System.out.println("ERROR: The number is not valid!");
                     break;
+            }
+        }
+    }
+
+    public void selectReceiverWallet() {
+        int answer = -1;
+        while (answer != 0) {
+            if (answer != -1) {
+                System.out.println("\n-------------RECEIVER-------------");
+            } else {
+                System.out.println("-------------RECEIVER-------------");
+            }
+            for (int i = 0; i < walletsManager.getWallets().size(); i++) {
+                System.out.println("[" + (i + 1) + "] " + walletsManager.getWallet(i).username);
+            }
+            System.out.println("[0] Go back");
+            System.out.print("> ");
+            answer = reader.nextInt();
+
+            if (answer > walletsManager.getWallets().size()) {
+                System.out.println("ERROR: The number is not valid!");
+            } else if (answer == 0) {
+                this.start();
+                break;
+            } else {
+                receiverWallet = this.walletsManager.getWallet(answer - 1);
+                if (receiverWallet.equals(selectedWallet)) {
+                    System.out.println("ERROR: You cannot send Fakecoins to yourself!");
+                } else {
+                    Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
+                    System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
+                    System.out.println("\nWalletA is Attempting to send funds (10) to WalletB...");
+                    block1.addTransaction(this.blockchain, selectedWallet.sendFunds(this.blockchain, receiverWallet.publicKey, 10));
+                    this.blockchain.addBlock(block1);
+                    System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
+                    System.out.println("WalletB's balance is: " + receiverWallet.getBalance(this.blockchain));
+                    break;
+                }
             }
         }
     }
