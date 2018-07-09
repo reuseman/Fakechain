@@ -54,8 +54,6 @@ public class Wallet {
     }
 
     public Transaction sendFunds(Blockchain blockchain, PublicKey _recipient, float value) {
-        System.out.println("BALANCE: " + this.getBalance(blockchain));
-        System.out.println("VALUE: " + value);
         if (this.getBalance(blockchain) < value) {
             System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
             return null;

@@ -23,7 +23,6 @@ public class Transaction {
         this.reciepient = to;
         this.value = value;
         this.inputs = inputs;
-        System.out.println("IL VALORE NEL CONSTRUCTOR TRANSACTION: " + this.value);
     }
 
     public boolean processTransaction(Blockchain blockchain) {
@@ -38,8 +37,6 @@ public class Transaction {
         }
 
         //Checks if transaction is valid:
-        System.out.println("IL VALORE NEL CHECK TRANSACTION: " + this.value);
-        System.out.println("IL VALORE NEL CONSTRUCTOR TRANSACTION: " + this.getInputsValue());
         if (this.getInputsValue() < Commons.MIMIMUM_FAKECOINS_PER_TRANSACTION) {
             System.out.println("Transaction Inputs too small: " + this.getInputsValue());
             System.out.println("Please enter the amount greater than " + Commons.MIMIMUM_FAKECOINS_PER_TRANSACTION);

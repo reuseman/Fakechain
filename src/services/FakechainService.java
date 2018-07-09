@@ -20,18 +20,10 @@ public class FakechainService {
         Wallet walletA = walletsManager.getWallet(1);
         Wallet walletB = walletsManager.getWallet(2);
 
-        System.out.println("BEFORE BLOCK1");
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
-        System.out.println("WalletB's balance is: " + walletB.getBalance(this.blockchain));
-
         //testing
         Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
-        System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
         block1.addTransaction(this.blockchain, walletA.sendFunds(this.blockchain, walletB.publicKey, 40));
         this.blockchain.addBlock(block1);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance(this.blockchain));
-        System.out.println("WalletB's balance is: " + walletB.getBalance(this.blockchain));
 
    /*     Block block2 = new Block(block1.hash);
         System.out.println("\nWalletA Attempting to send more funds (1000) than it has...");
@@ -45,7 +37,7 @@ public class FakechainService {
     }
 
     public void start() {
-        System.out.println("LOADING...");
+        System.out.println("\nLOADING...");
         while (this.answer != 0) {
             if (this.answer != -1) {
                 System.out.println("\n-------------MENU-------------");
@@ -177,13 +169,36 @@ public class FakechainService {
                 if (receiverWallet.equals(selectedWallet)) {
                     System.out.println("ERROR: You cannot send Fakecoins to yourself!");
                 } else {
-                    Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
-                    System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
-                    System.out.println("\nWalletA is Attempting to send funds (10) to WalletB...");
-                    block1.addTransaction(this.blockchain, selectedWallet.sendFunds(this.blockchain, receiverWallet.publicKey, 10));
-                    this.blockchain.addBlock(block1);
-                    System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
-                    System.out.println("WalletB's balance is: " + receiverWallet.getBalance(this.blockchain));
+                    int fakeCoins = -1;
+                    float tmpSelectedWalletBalance = this.selectedWallet.getBalance(blockchain);
+
+                    while (fakeCoins == -1) {
+                        System.out.println("Fakecoins to transfer [0.1, " + tmpSelectedWalletBalance + "]");
+                        System.out.print("> ");
+                        fakeCoins = reader.nextInt();
+
+                        if (fakeCoins <= 0) {
+                            System.out.println("ERROR: You cannot send less than 0 Fakecoins!");
+                            fakeCoins = -1;
+                        } else if (fakeCoins > tmpSelectedWalletBalance) {
+                            System.out.println("ERROR: You cannot more than the coins in your wallet!");
+                        } else {
+                            Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
+                            System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
+                            System.out.println("\n" + selectedWallet.username + " is trying to send " + fakeCoins +
+                                    " Fakecoins to " + receiverWallet.username);
+                            boolean transactionDone = block1.addTransaction(
+                                    this.blockchain,
+                                    selectedWallet.sendFunds(this.blockchain, receiverWallet.publicKey, fakeCoins));
+                            if (transactionDone) {
+                                this.blockchain.addBlock(block1);
+                            } else {
+                                System.out.println("ERROR: Transaction went wrong!");
+                            }
+                            break;
+                        }
+                    }
+
                     break;
                 }
             }
