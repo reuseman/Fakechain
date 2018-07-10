@@ -28,8 +28,8 @@ public class MiningService {
             Block possibleNewBlock = new Block(previousHash);
             this.possibleBlockchain = new Blockchain(blockchain);
 
-            Transaction minerTransaction = new Transaction();
-            possibleNewBlock.addTransaction(this.possibleBlockch);
+            //Transaction minerTransaction = new Transaction();
+            //possibleNewBlock.addTransaction(this.possibleBlockch);
             isRunning = true;
         }
     }

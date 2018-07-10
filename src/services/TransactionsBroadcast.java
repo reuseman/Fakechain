@@ -25,7 +25,7 @@ public class TransactionsBroadcast {
             return false;
         } else if (transactionsToAdd.size() <= Commons.MAX_TRANSACTIONS_NUMBER_PER_BLOCK - 1){
             transactionsToAdd.add(transaction);
-            this.miningService.startMiningSession();
+            //this.miningService.startMiningSession();
             return true;
         }
 

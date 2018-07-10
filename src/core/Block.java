@@ -43,15 +43,15 @@ public class Block {
             hash = calculateHash();
         }
 
-        System.out.println("Block Mined!!! : " + hash);
+        System.out.println("# Block Mined, the hash is: " + hash);
     }
 
     public boolean addTransaction(Blockchain blockchain, Transaction transaction) {
-        //process transaction and check if valid, unless block is genesis block then ignore.
         if(transaction == null) {
             return false;
         }
 
+        // The check it is done only if the block is not a genesis one
         if((!"0".equals(previousHash))) {
             if((transaction.processTransaction(blockchain) != true)) {
                 System.out.println("Transaction failed to process. Discarded.");
@@ -60,7 +60,7 @@ public class Block {
         }
 
         transactions.add(transaction);
-        System.out.println("Transaction Successfully added to Block");
+        System.out.println("# Transaction Successfully added to Block");
         return true;
     }
 

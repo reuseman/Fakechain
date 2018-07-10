@@ -44,17 +44,17 @@ public class Transaction {
         }
 
         // Generate the transaction outputs
-        float leftOver = getInputsValue() - this.value; //get value of inputs then the left over change:
+        float leftOver = getInputsValue() - this.value; // Getting value of inputs then the left over change:
         this.transactionId = calulateHash();
-        this.outputs.add(new TransactionOUT(this.reciepient, this.value, this.transactionId)); //send value to recipient
-        this.outputs.add(new TransactionOUT(this.sender, leftOver, this.transactionId)); //send the left over 'change' back to sender
+        this.outputs.add(new TransactionOUT(this.reciepient, this.value, this.transactionId)); // Send value to recipient
+        this.outputs.add(new TransactionOUT(this.sender, leftOver, this.transactionId)); // Send the left over change back to sender
 
         // Adding outputs to the unspent list
         for (TransactionOUT o : this.outputs) {
             blockchain.UTXOs.put(o.id, o);
         }
 
-        //Remove transaction inputs from UTXO lists as spent:
+        // Remove transaction inputs from UTXO lists as spent:
         for (TransactionIN i : this.inputs) {
             if (i.UTXO == null) continue;
             blockchain.UTXOs.remove(i.UTXO.id);
@@ -91,7 +91,7 @@ public class Transaction {
     }
 
     private String calulateHash() {
-        sequence++; //increase the sequence to avoid 2 identical transactions having the same hash
+        sequence++;
         return CryptoUtil.getHash256(
                 CryptoUtil.getStringFromKey(this.sender) +
                         CryptoUtil.getStringFromKey(this.reciepient) +

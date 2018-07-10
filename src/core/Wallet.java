@@ -32,7 +32,7 @@ public class Wallet {
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
 
-            keyGen.initialize(ecSpec, random); //256
+            keyGen.initialize(ecSpec, random);
             KeyPair keyPair = keyGen.generateKeyPair();
 
             this.privateKey = keyPair.getPrivate();
@@ -47,8 +47,10 @@ public class Wallet {
         float total = 0;
         for (Map.Entry<String, TransactionOUT> item : blockchain.UTXOs.entrySet()) {
             TransactionOUT UTXO = item.getValue();
-            if (UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
-                UTXOs.put(UTXO.id, UTXO); //add it to our list of unspent transactions.
+            // The control check if the output belongs to myself, in other words if Fakecoins belong to me
+            // If it is true then it is added to the list of unspent transactions
+            if (UTXO.isMine(publicKey)) {
+                UTXOs.put(UTXO.id, UTXO);
                 total += UTXO.value;
             }
         }

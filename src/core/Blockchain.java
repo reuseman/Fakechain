@@ -23,13 +23,16 @@ public class Blockchain {
 
         // Hard code the first transaction to get a proper working Blockchain
         this.genesisTransaction = new Transaction(coinbaseWallet.publicKey, receiverWallet.publicKey, 100f, null);
-        this.genesisTransaction.generateSignature(coinbaseWallet.privateKey);     //manually sign the genesis transaction
+        // Manual sign
+        this.genesisTransaction.generateSignature(coinbaseWallet.privateKey);
         this.genesisTransaction.transactionId = "0";
+        // Adding manually the Transactio output
         this.genesisTransaction.outputs.add(new TransactionOUT(this.genesisTransaction.reciepient,
-                this.genesisTransaction.value, this.genesisTransaction.transactionId)); //manually add the Transactions Output
-        this.UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
+                this.genesisTransaction.value, this.genesisTransaction.transactionId));
+        // The first transaction is added to the UTXOs
+        this.UTXOs.put(this.genesisTransaction.outputs.get(0).id, this.genesisTransaction.outputs.get(0));
 
-        System.out.println("Creating and Mining Genesis block... ");
+        System.out.println("# Creating and Mining Genesis block... ");
         Block genesis = new Block("0");
         genesis.addTransaction(this, this.genesisTransaction);
         this.addBlock(genesis);
@@ -39,7 +42,8 @@ public class Blockchain {
         Block currentBlock;
         Block previousBlock;
         String hashTarget = CryptoUtil.getTarget(Commons.MINING_BLOCK_DIFFICULTY);
-        HashMap<String, TransactionOUT> tempUTXOs = new HashMap<>(); //a temporary working list of unspent transactions at a given block state.
+        // Temporary list of unspent transac. for a given block
+        HashMap<String, TransactionOUT> tempUTXOs = new HashMap<>();
         tempUTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
 
         // Loop check on the blocks of the chain

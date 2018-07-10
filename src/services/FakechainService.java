@@ -16,15 +16,6 @@ public class FakechainService {
     public FakechainService(WalletsManager walletsManager, Blockchain blockchain) {
         this.walletsManager = walletsManager;
         this.blockchain = blockchain;
-
-        Wallet walletA = walletsManager.getWallet(1);
-        Wallet walletB = walletsManager.getWallet(2);
-
-        //testing
-        Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
-        block1.addTransaction(this.blockchain, walletA.sendFunds(this.blockchain, walletB.publicKey, 40));
-        this.blockchain.addBlock(block1);
-
         this.reader = new Scanner(System.in);
         this.answer = -1;
     }
@@ -121,7 +112,8 @@ public class FakechainService {
                 System.out.println("-------------WALLET-------------");
             }
 
-            System.out.println("Selected: " + this.selectedWallet.username + ", " + this.selectedWallet.getBalance(this.blockchain) + " fake coins");
+            System.out.println("Selected: " + this.selectedWallet.username + ", " +
+                    this.selectedWallet.getBalance(this.blockchain) + " fake coins");
             System.out.println("[1] Make a transaction");
             System.out.println("[0] Go back");
             System.out.print("> ");
@@ -129,7 +121,6 @@ public class FakechainService {
 
             switch (answer) {
                 case 1:
-                    System.out.println("TODO");
                     this.selectReceiverWallet();
                     break;
                 case 0:
@@ -171,7 +162,11 @@ public class FakechainService {
                     float tmpSelectedWalletBalance = this.selectedWallet.getBalance(blockchain);
 
                     while (fakeCoins == -1) {
-                        System.out.println("Fakecoins to transfer [0.1, " + tmpSelectedWalletBalance + "]");
+                        if (tmpSelectedWalletBalance == 0) {
+                            System.out.println("You got no Fakecoins..");
+                        } else {
+                            System.out.println("Fakecoins to transfer [0.1, " + tmpSelectedWalletBalance + "]");
+                        }
                         System.out.print("> ");
                         fakeCoins = reader.nextInt();
 
@@ -181,17 +176,15 @@ public class FakechainService {
                         } else if (fakeCoins > tmpSelectedWalletBalance) {
                             System.out.println("ERROR: You cannot more than the coins in your wallet!");
                         } else {
-                            Block block1 = new Block(this.blockchain.blockchain.get(0).hash);
-                            System.out.println("\nWalletA's balance is: " + selectedWallet.getBalance(this.blockchain));
+                            Block blockToAdd =
+                                    new Block(this.blockchain.blockchain.get(this.blockchain.blockchain.size() - 1).hash);
                             System.out.println("\n" + selectedWallet.username + " is trying to send " + fakeCoins +
                                     " Fakecoins to " + receiverWallet.username);
-                            boolean transactionDone = block1.addTransaction(
+                            boolean transactionDone = blockToAdd.addTransaction(
                                     this.blockchain,
                                     selectedWallet.sendFunds(this.blockchain, receiverWallet.publicKey, fakeCoins));
                             if (transactionDone) {
-                                this.blockchain.addBlock(block1);
-                                System.out.println("# Transaction executed. Added to a block..");
-                                System.out.println("# Block mined!");
+                                this.blockchain.addBlock(blockToAdd);
                             } else {
                                 System.out.println("ERROR: Transaction went wrong!");
                             }

@@ -15,8 +15,9 @@ public class WalletsManager {
         this.wallets.add(new Wallet("alex"));
         this.wallets.add(new Wallet("john"));
 
+        //TODO Temporary removed, improve after the Exam with an external way to toggle on/off the availability to be a miner
         // Hard coding other wallet, BUT setting them to be even miner
-        this.wallets.add(new Wallet("miner1"));
+        /*this.wallets.add(new Wallet("miner1"));
         this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
         this.wallets.add(new Wallet("miner2"));
         this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
@@ -27,7 +28,7 @@ public class WalletsManager {
         this.wallets.add(new Wallet("miner5"));
         this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
         this.wallets.add(new Wallet("miner6"));
-        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);
+        this.wallets.get(this.wallets.size() - 1).setMiningEnabled(true);*/
     }
 
     public void createNewWallet(String username) {
