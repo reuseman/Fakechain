@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactManager">
+    <artifact type="jar" name="Fakechain:jar">
+      <output-path>$PROJECT_DIR$/out/artifacts/Fakechain_jar</output-path>
+      <root id="archive" name="Fakechain.jar">
+        <element id="module-output" name="Fakechain" />
+        <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/bouncycastle/bcprov-jdk15on/1.59/bcprov-jdk15on-1.59.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar" path-in-jar="/" />
+      </root>
+    </artifact>
+  </component>
   <component name="CheckStyle-IDEA">
     <option name="configuration">
       <map>
@@ -13,6 +26,7 @@
       </map>
     </option>
   </component>
+  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
   <component name="InspectionProjectProfileManager">
     <profile version="1.0">
       <option name="myName" value="Project Default" />
