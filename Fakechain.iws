@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Fakechain:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8ffc7aed-52b4-415b-ba46-53e88d1d8508" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/Fakechain.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Fakechain.iml" afterDir="false" />
@@ -541,10 +546,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>Fakechain:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
